@@ -39,7 +39,7 @@ namespace Telegram.BotClient
         {
             if (System.IO.File.Exists(System.Environment.CurrentDirectory + "/" + "state.dat"))
             {
-                using (var sav = System.IO.File.Open(System.Environment.CurrentDirectory + "/" + "state.dat",System.IO.FileMode.Open))
+                using (var sav = System.IO.File.Open(System.Environment.CurrentDirectory + "/" + "state.dat", System.IO.FileMode.Open))
                 {
                     BinaryFormatter bf = new BinaryFormatter();
                     var obj = bf.Deserialize(sav);
@@ -105,7 +105,8 @@ namespace Telegram.BotClient
                 var com = update.Message.Entities.FirstOrDefault(x => x.Type == MessageEntity.EntityType.bot_command);
                 if (com != null && update.Message.Text == "/start")
                 {
-                    api.SendMessage(chatId, "Привет, я бот Антон я создан для того, чтобы предложить вам некоторые товары");
+
+                    api.SendMessage(chatId, $"Привет, {update.Message.From.FirstName}, я бот Антон я создан для того, чтобы предложить вам некоторые товары");
                     state = "start";
                 }
             }
@@ -127,11 +128,11 @@ namespace Telegram.BotClient
                     if (update.CallbackQuery.Data == "1")
                     {
                         state = "chose tovar";
-                        var price1 = new LabeledPrice[] { new LabeledPrice() { Label = "Масленка", Amount = 6000 }, new LabeledPrice() { Amount = 20000, Label = "Масло элитное" } };
-                        var price2 = new LabeledPrice[] { new LabeledPrice() { Label = "Кекнутая копия игры", Amount = 66666 }, new LabeledPrice() { Amount = -7000, Label = "Скидка тип" } };
-                        api.SendInvoice(chatId, "Maslo", "Супер мега крутое масло, обеспечит вас биткоинами", "test", "1", "RUB", price1,
+                        var price1 = new LabeledPrice[] { new LabeledPrice() { Label = "Масленка PREMIUM", Amount = 6000 }, new LabeledPrice() { Amount = 20000, Label = "Масло элитное" } };
+                        var price2 = new LabeledPrice[] { new LabeledPrice() { Label = "Кекнутая копия игры", Amount = 66666 }, new LabeledPrice() { Amount = -7000, Label = "Новогодняя скидка" } };
+                        api.SendInvoice(chatId, "Масленка PREMIUM + масло в подарок", "Революционная масленка с порцией непревзайденного элитного масла", "test", "1", "RUB", price1,
                             "http://belive.ru/wp-content/uploads/2016/12/slivochnoe-maslo-hranit.jpg");
-                        api.SendInvoice(chatId, "Фоллаут 5", "Если вы хотите замочить пару сотен мутантов, взорвать институт и провести 260 лет игры в морозильнике, то эта игра для вас", "test", "2", "RUB", price2,
+                        api.SendInvoice(chatId, "Фоллаут 4", "Если вы хотите замочить пару сотен мутантов, взорвать институт и провести 260 лет игры в морозильнике, то эта игра для вас!", "test", "2", "RUB", price2,
                            "https://cdn.wallpapersafari.com/26/71/LhpB9P.jpg");
                     }
                     else
@@ -181,7 +182,7 @@ namespace Telegram.BotClient
                 state = "start";
                 api.SendMessage(chatId, "Спасибо! Выш отзыв очень важен для нас!))");
                 api.SendMessage(chatId, "Чтобы продолжить отправьте любое сообщение....");
-                SaveOpinion(chatId, update.Message.From.FirstName, update.Message.Text);
+                SaveOpinion(chatId, update.Message.From.FirstName, $"[{System.DateTime.Now.ToLongDateString()}] " + update.Message.Text);
             }
         }
 
